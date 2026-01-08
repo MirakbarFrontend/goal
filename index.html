@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vazn Nazorati</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(to right, #a1c4fd, #c2e9fb);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .container {
+        background: white;
+        padding: 40px 50px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        max-width: 400px;
+        width: 100%;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    label {
+        display: block;
+        margin-top: 20px;
+        color: #555;
+        font-weight: 500;
+    }
+    input[type="number"] {
+        width: 100%;
+        padding: 12px;
+        margin-top: 5px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+    button {
+        margin-top: 25px;
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(to right, #00f2fe, #4facfe);
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    button:hover {
+        opacity: 0.9;
+    }
+    .result {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 18px;
+        font-weight: 500;
+        color: #333;
+    }
+    .overweight {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+    .normal {
+        color: #27ae60;
+        font-weight: bold;
+    }
+    .underweight {
+        color: #f39c12;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Vazn Nazorati</h1>
+    <label for="age">Yoshingiz (yil)</label>
+    <input type="number" id="age" min="1" placeholder="Masalan: 25">
+
+    <label for="height">Bo'yingiz (sm)</label>
+    <input type="number" id="height" min="50" placeholder="Masalan: 175">
+
+    <label for="weight">Vazningiz (kg)</label>
+    <input type="number" id="weight" min="10" placeholder="Masalan: 70">
+
+    <button onclick="calculateBMI()">Natijani hisoblash</button>
+
+    <div class="result" id="result"></div>
+</div>
+
+<script>
+function calculateBMI() {
+    const age = document.getElementById('age').value;
+    const height = document.getElementById('height').value;
+    const weight = document.getElementById('weight').value;
+    const resultDiv = document.getElementById('result');
+
+    if (!age || !height || !weight) {
+        resultDiv.innerHTML = "Iltimos, barcha maydonlarni to'ldiring!";
+        resultDiv.className = "result";
+        return;
+    }
+
+    const heightMeters = height / 100;
+    const bmi = weight / (heightMeters * heightMeters);
+    const bmiRounded = bmi.toFixed(1);
+
+    const idealMin = 18.5 * (heightMeters * heightMeters);
+    const idealMax = 24.9 * (heightMeters * heightMeters);
+
+    let message = "";
+
+    if (bmi < 18.5) {
+        const kgNeeded = (idealMin - weight).toFixed(1);
+        message = `Siz ozg'insiz. ${kgNeeded} kg qo‘shishingiz tavsiya etiladi.`;
+        resultDiv.className = "result underweight";
+    } else if (bmi <= 24.9) {
+        message = `Sizning vazningiz ideal oraliqda. 🟢`;
+        resultDiv.className = "result normal";
+    } else {
+        const excess = (weight - idealMax).toFixed(1);
+        message = `Sizning vazningiz ortiqcha. ${excess} kg kamaytirishingiz tavsiya etiladi. 🔴`;
+        resultDiv.className = "result overweight";
+    }
+
+    resultDiv.innerHTML = message;
+}
+</script>
+</body>
+</html>
